@@ -7,6 +7,7 @@
 
 typedef unsigned int uint;
 #define ARR_LEN 100000000L
+#define THREADS 4
 class mergesort
 {
 private:
@@ -17,7 +18,10 @@ public:
     mergesort(uint *_arr);
     ~mergesort() = default;
 
+    /// @brief многопоточная сортировка
     void sort_mt(long l, long r);
+
+    /// @brief Однопоточная сортировка
     void sort(long l, long r);
 
 private:

@@ -50,6 +50,10 @@ int main()
     printMessage("Однопоточная сортировка завершена за " + std::to_string(seconds) + " секунд.", true);
     test_sort(arr2, ARR_LEN);
 
+#if defined(_WIN64) || defined(_WIN32)
+    system("pause");
+#endif
+
     return 0;
 }
 

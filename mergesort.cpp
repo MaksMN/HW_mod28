@@ -13,8 +13,7 @@ void mergesort::sort_mt(long l, long r)
 
     auto len = abs(r - l);
     auto N = std::thread::hardware_concurrency() / 2;
-
-    if (threads > 4)
+    if (N < 2 || threads > THREADS || len < 10000)
     {
         sort(l, r);
         return;
@@ -23,8 +22,7 @@ void mergesort::sort_mt(long l, long r)
     auto f1 = std::async(std::launch::async, [&]()
                          {
                              threads++;
-                             sort_mt(l, m);                            
-                             
+                             sort_mt(l, m);
                              threads--; });
     sort_mt(m + 1, r);
     f1.wait();
