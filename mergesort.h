@@ -1,21 +1,25 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <future>
+#include <chrono>
+#include <thread>
 
 typedef unsigned int uint;
-#define ARR_LEN 6
-
+#define ARR_LEN 100000000L
 class mergesort
 {
 private:
-    uint (&arr)[ARR_LEN];
+    uint *arr;
+    uint threads = 0;
 
 public:
-    mergesort(uint (&_arr)[ARR_LEN]);
+    mergesort(uint *_arr);
     ~mergesort() = default;
 
-    void sort(int l, int r);
+    void sort_mt(long l, long r);
+    void sort(long l, long r);
 
 private:
-    void merge(int l, int m, int r);
+    void merge(long l, long m, long r);
 };

@@ -1,33 +1,64 @@
 #include "mergesort.h"
 
-mergesort::mergesort(uint (&_arr)[ARR_LEN]) : arr(_arr) {}
+mergesort::mergesort(uint *_arr)
+{
+    arr = _arr;
+}
 
-void mergesort::sort(int l, int r)
+void mergesort::sort_mt(long l, long r)
 {
     if (l >= r)
         return;
-    int m = (l + r - 1) / 2;
-    sort(l, m);
-    sort(m + 1, r);
+    long m = (l + r - 1) / 2;
+
+    auto len = abs(r - l);
+    auto N = std::thread::hardware_concurrency() / 2;
+
+    if (threads > 4)
+    {
+        sort(l, r);
+        return;
+    }
+
+    auto f1 = std::async(std::launch::async, [&]()
+                         {
+                             threads++;
+                             sort_mt(l, m);                            
+                             
+                             threads--; });
+    sort_mt(m + 1, r);
+    f1.wait();
     merge(l, m, r);
 }
 
-void mergesort::merge(int l, int m, int r)
+void mergesort::sort(long l, long r)
 {
-    int nl = m - l + 1;
-    int nr = r - m;
+    if (l >= r)
+        return;
+    long m = (l + r - 1) / 2;
+
+    sort(l, m);
+    sort(m + 1, r);
+
+    merge(l, m, r);
+}
+
+void mergesort::merge(long l, long m, long r)
+{
+    long nl = m - l + 1;
+    long nr = r - m;
 
     // создаем временные массивы
-    int left[nl], right[nr];
+    uint *left{new uint[nl]}, *right{new uint[nr]};
 
     // копируем данные во временные массивы
-    for (int i = 0; i < nl; i++)
+    for (long i = 0; i < nl; i++)
         left[i] = arr[l + i];
-    for (int j = 0; j < nr; j++)
+    for (long j = 0; j < nr; j++)
         right[j] = arr[m + 1 + j];
 
-    int i = 0, j = 0;
-    int k = l; // начало левой части
+    long i = 0, j = 0;
+    long k = l; // начало левой части
 
     while (i < nl && j < nr)
     {
@@ -58,4 +89,6 @@ void mergesort::merge(int l, int m, int r)
         j++;
         k++;
     }
+    delete[] left;
+    delete[] right;
 }
