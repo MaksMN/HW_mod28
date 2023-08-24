@@ -4,18 +4,20 @@
 #include <future>
 #include <chrono>
 #include <thread>
+#include "Misc.h"
 
 typedef unsigned int uint;
-#define ARR_LEN 100000000L
-#define THREADS 4
+
 class mergesort
 {
 private:
+    const long arr_len;
+    const uint max_threads;
     uint *arr;
     uint threads = 0;
 
 public:
-    mergesort(uint *_arr);
+    explicit mergesort(uint *_arr, long &_arr_len, uint &_max_threads);
     ~mergesort() = default;
 
     /// @brief многопоточная сортировка
@@ -24,6 +26,10 @@ public:
     /// @brief Однопоточная сортировка
     void sort(long l, long r);
 
+    void test_sort();
+
 private:
     void merge(long l, long m, long r);
 };
+
+// https://stackoverflow.com/questions/24130307/performance-problems-in-parallel-mergesort-c

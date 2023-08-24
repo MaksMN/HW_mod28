@@ -1,9 +1,7 @@
 #include "mergesort.h"
 
-mergesort::mergesort(uint *_arr)
-{
-    arr = _arr;
-}
+mergesort::mergesort(uint *_arr, long &_arr_len, uint &_max_threads)
+    : arr(_arr), arr_len(_arr_len), max_threads(_max_threads) {}
 
 void mergesort::sort_mt(long l, long r)
 {
@@ -13,7 +11,7 @@ void mergesort::sort_mt(long l, long r)
 
     auto len = abs(r - l);
     auto N = std::thread::hardware_concurrency() / 2;
-    if (N < 2 || threads > THREADS || len < 10000)
+    if (N < 2 || threads >= max_threads || len < 10000)
     {
         sort(l, r);
         return;
@@ -39,6 +37,34 @@ void mergesort::sort(long l, long r)
     sort(m + 1, r);
 
     merge(l, m, r);
+}
+
+void mergesort::test_sort()
+{
+    long prev = 0;
+    long k = 0;
+    bool sort_unsuccessfully = false;
+    for (long i{0}; i < arr_len; i++)
+    {
+        if (arr[i] < prev)
+        {
+            sort_unsuccessfully = true;
+            break;
+        }
+        else
+        {
+            prev = arr[i];
+        }
+        k = i;
+    }
+    if (sort_unsuccessfully)
+    {
+        printMessage("Массив не отсортирован.", true);
+    }
+    else
+    {
+        printMessage("Массив отсортирован без ошибок. " + std::to_string(k + 1) + " элементов", true);
+    }
 }
 
 void mergesort::merge(long l, long m, long r)

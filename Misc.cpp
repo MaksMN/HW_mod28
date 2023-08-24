@@ -13,31 +13,3 @@ void printMessage(const std::string &&msg, bool endl)
         std::cout << std::endl;
 #endif
 }
-
-void test_sort(uint *arr, long len)
-{
-    long prev = 0;
-    long k = 0;
-    bool sort_unsuccessfully = false;
-    for (long i{0}; i < len; i++)
-    {
-        if (arr[i] < prev)
-        {
-            sort_unsuccessfully = true;
-            break;
-        }
-        else
-        {
-            prev = arr[i];
-        }
-        k = i;
-    }
-    if (sort_unsuccessfully)
-    {
-        printMessage("Сортировка с ошибками", true);
-    }
-    else
-    {
-        printMessage("Сортировка без ошибок " + std::to_string(k + 1) + " элементов", true);
-    }
-}
