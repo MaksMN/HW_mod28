@@ -20,23 +20,40 @@ int main()
     uint max_threads = 8;
 
     printMessage("Укажите размер массива(ноль = 100000000): ", false);
+#if defined(_WIN64) || defined(_WIN32)
+    std::wcin >> arr_len;
+    std::wcin.clear();
+    while (std::wcin.get() != '\n')
+    {
+    }
+#else
     std::cin >> arr_len;
+    std::cin.clear();
+    while (std::cin.get() != '\n')
+    {
+    }
+#endif
     if (arr_len == 0)
         arr_len = 100000000;
-    std::cin.clear();
-    while (std::cin.get() != '\n')
-    {
-    }
+
     printMessage("Приложение не будет открывать новые потоки если их количество в рекурсии превысит ниже указанное значение", true);
     printMessage("Укажите максимальное количество потоков (ноль = 8): ", false);
+#if defined(_WIN64) || defined(_WIN32)
+    std::wcin >> max_threads;
+    std::wcin.clear();
+    while (std::wcin.get() != '\n')
+    {
+    }
+#else
     std::cin >> max_threads;
-    if (max_threads == 0)
-        max_threads = 4;
     std::cin.clear();
     while (std::cin.get() != '\n')
     {
     }
+#endif
 
+    if (max_threads == 0)
+        max_threads = 4;
     /* Многопоточная */
     printMessage("Многопоточная сортировка: массив " + std::to_string(arr_len) + " элементов.", true);
     uint *arr{new uint[arr_len]};
